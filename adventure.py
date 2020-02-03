@@ -68,17 +68,18 @@ def login():
     password = values.get('password')
 
     response = world.authenticate_user(username, password)
-    if None in response:
-        return response, 500
+    if response is None:
+        return jsonify(response), 500
     else:
-        return response, 200
+        return jsonify('Authorization: ', response.auth_key), 200
+
 
 @app.route('/api/adv/init/', methods=['GET'])
 def init():
     player = get_player_by_header(world, request.headers.get("Authorization"))
     if player is None:
         response = {'error': "Malformed auth header"}
-        return jsonify(response), 500
+        return response, 500
 
     response = {
         'title': player.current_room.name,
@@ -154,4 +155,4 @@ def rooms():
 
 # Run the program on port 5000
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=False, port=5000)
