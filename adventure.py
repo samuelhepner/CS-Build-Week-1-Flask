@@ -49,6 +49,7 @@ def register():
     else:
         return jsonify(response), 200
 
+# test endpoint
 @app.route('/', methods=['GET'])
 def test_method():
     return 'Hello World'
@@ -56,9 +57,21 @@ def test_method():
 @app.route('/api/login/', methods=['POST'])
 def login():
     # IMPLEMENT THIS
-    response = {'error': "Not implemented"}
-    return jsonify(response), 400
+    values = request.get_json()
+    required = ['username', 'password']
 
+    if not all(k in values for k in required):
+        response = {'message': "Missing Values"}
+        return jsonify(response), 400
+
+    username = values.get('username')
+    password = values.get('password')
+
+    response = world.authenticate_user(username, password)
+    if 'error' in response:
+        return jsonify(response), 500
+    else:
+        return jsonify(response), 200
 
 @app.route('/api/adv/init/', methods=['GET'])
 def init():
