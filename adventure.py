@@ -44,7 +44,7 @@ def register():
     password2 = values.get('password2')
 
     response = world.add_player(username, password1, password2)
-    if None in response:
+    if 'error' in response:
         return jsonify(response), 500
     else:
         return jsonify(response), 200
@@ -68,10 +68,10 @@ def login():
     password = values.get('password')
 
     response = world.authenticate_user(username, password)
-    if 'error' in response:
-        return jsonify(response), 500
+    if None in response:
+        return response, 500
     else:
-        return jsonify(response), 200
+        return response, 200
 
 @app.route('/api/adv/init/', methods=['GET'])
 def init():
