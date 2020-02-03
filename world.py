@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+from store import Store
 import random
 import math
 import bcrypt
@@ -80,4 +81,17 @@ class World:
 
 
 
+# testing stuff
 
+store = Store()
+
+store.buy()
+
+store.sell()
+
+player = Player('Quinton', Room("Foyer", """Dim light filters in from the south. Dusty
+        passages run north and east.""", 2, 1, 2), '123')
+
+player.pick_up()
+
+player.drop()
