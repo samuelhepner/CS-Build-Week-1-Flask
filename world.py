@@ -40,6 +40,7 @@ class World:
 
     def authenticate_user(self, username, password):
         user = self.get_player_by_username(username)
+        print('user: ', user)
         if user is None:
             return None
         password_hash = bcrypt.hashpw(password.encode() ,self.password_salt)
