@@ -44,7 +44,7 @@ def register():
     password2 = values.get('password2')
 
     response = world.add_player(username, password1, password2)
-    if 'error' in response:
+    if None in response:
         return jsonify(response), 500
     else:
         return jsonify(response), 200
