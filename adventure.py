@@ -68,7 +68,7 @@ def login():
     password = values.get('password')
 
     response = world.authenticate_user(username, password)
-    if None in response:
+    if response is None:
         return response, 500
     else:
         return response, 200
