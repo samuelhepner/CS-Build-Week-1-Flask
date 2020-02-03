@@ -18,7 +18,6 @@ world = World()
 
 app = Flask(__name__)
 
-
 def get_player_by_header(world, auth_header):
     if auth_header is None:
         return None
@@ -49,6 +48,10 @@ def register():
         return jsonify(response), 500
     else:
         return jsonify(response), 200
+
+@app.route('/', methods=['GET'])
+def test_method():
+    return 'Hello World'
 
 @app.route('/api/login/', methods=['POST'])
 def login():
