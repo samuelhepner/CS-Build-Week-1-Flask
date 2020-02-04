@@ -79,20 +79,3 @@ class World:
         self.rooms['narrow'].connect_rooms('n', self.rooms['treasure'])
 
         self.starting_room = self.rooms['outside']
-
-
-
-# testing stuff
-
-# store = Store()
-
-# store.buy()
-
-# store.sell()
-
-# player = Player('Quinton', Room("Foyer", """Dim light filters in from the south. Dusty
-#         passages run north and east.""", 2, 1, 2), '123')
-
-# player.pick_up()
-
-# player.drop()
