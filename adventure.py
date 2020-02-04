@@ -52,9 +52,9 @@ def register():
         return jsonify(response), 200
 
 # test endpoint
-@app.route('/', methods=['GET'])
-def test_method():
-    return 'Hello World'
+# @app.route('/', methods=['GET'])
+# def test_method():
+#     return 'Hello World'
 
 @app.route('/api/login/', methods=['POST'])
 def login():
@@ -140,6 +140,7 @@ def take_item():
             print('THIS IS THE ITEM: ', item.name)
             return jsonify(f"You have picked up {item.name}"), 200
 
+
 @app.route('/api/adv/drop/', methods=['POST'])
 def drop_item():
     # IMPLEMENT THIS
@@ -157,6 +158,7 @@ def drop_item():
     for item in inventory:
         if item.name.lower() == values['item_name'].lower():
             player.inventory.remove(item)
+            player.current_room.items.append(item)
             return jsonify(f"You have dropped {item.name}"), 200
         else:
             return jsonify('Item not found'), 500
@@ -186,6 +188,7 @@ def inventory():
             response.append({'name': player.inventory[i].name, 'description': player.inventory[i].description, 'price': player.inventory[i].price})
     
     return jsonify({'Inventory': response}), 200
+
 
 @app.route('/api/adv/buy/', methods=['POST'])
 def buy_item():
@@ -239,6 +242,7 @@ def sell_item():
             else:
                 return jsonify('Store does not have enough gold coins to buy that item from you.'), 500
 
+
 @app.route('/api/adv/store', methods=['GET'])
 def check_store():
     player = get_player_by_header(world, request.headers.get("Authorization"))
@@ -262,6 +266,7 @@ def check_store():
             response.append({'name': stock[i].name, 'description': stock[i].description, 'price': stock[i].price})
     
     return jsonify({'Stock': response}), 200
+
 
 @app.route('/api/adv/rooms/', methods=['GET'])
 def rooms():

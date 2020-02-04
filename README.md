@@ -1,5 +1,51 @@
 # CS Build Week 1
 
+## Table of Contents
+- **[Contributors](#contributors)**<br>
+- **[API Documentation](#api-documentation)**<br>
+- **[API Endpoints](#api-endpoints)**<br>
+- **[Directions](#directions)**<br>
+
+## Contributors
+| [Quinton McNamee](https://github.com/QuintonMcNamee) | [Samuel Hepner](https://github.com/SamH3pn3r) | [Karen Li](https://github.com/karenjli) |  
+| :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
+| <img src='https://github.com/QuintonMcNamee.png' width='200'/> | <img src='https://github.com/SamH3pn3r.png' width = "200" /> | <img src='https://github.com/karenjli.png' width = "200" /> | 
+|[<img src='https://github.com/favicon.ico' width="15">](https://github.com/QuintonMcNamee) | [<img src="https://github.com/favicon.ico" width="15">](https://github.com/SamH3pn3r) | [<img src="https://github.com/favicon.ico" width="15">](https://github.com/karenjli) |
+
+## API Documentation
+
+#### Backend deployed at [Heroku](https://team-big-bosses-be.herokuapp.com/) <br>
+
+## API Endpoints
+
+### Authentication
+| Method | Endpoint | Body | Description |
+| ----- | ----------------- | -------------------- | ------------------ |
+| POST | `/api/registration` | username, password1, password2 | Returns authentication key. |
+| POST | `/api/login` | username, password | Returns authentication key. |
+
+### Initialize (Requires Authentication Key)
+| Method | Endpoint | Body | Description |
+| ----- | ----------------- | -------------------- | ------------------ |
+| GET | `/api/adv/init` | N/A | Tells you your current location. |
+
+### Movement (Requires Authentication Key)
+| Method | Endpoint | Body | Description |
+| ----- | ----------------- | -------------------- | ------------------ |
+| POST | `/api/adv/move` | direction | ("n", "s", "e", "w") |
+
+### Items (Requires Authentication Key)
+| Method | Endpoint | Body | Description |
+| ----- | ----------------- | -------------------- | ------------------ |
+| POST | `/api/adv/take` | item_name | Picks up an item in your current room. |
+| POST | `/api/adv/drop` | item_name | Drops an item in your current room. |
+| GET | `/api/adv/inventory` | N/A | Checks your inventory. |
+| POST | `/api/adv/buy` | item_name | Buys an item from the store. You must be in the same room as the store. |
+| POST | `/api/adv/sell` | item_name | Sells an item to the store. You must be in the same room as the store. |
+| GET | `/api/adv/store` | N/A | Checks the stock of the store and how much money the store has. You must be in the same room as the store. |
+
+## Directions
+
 For your first CS Build Week, you will be building an interactive ***Multi-User Dungeon (MUD)*** client and server in groups. To succeed with this project, you will be applying knowledge you've learned throughout the first part of CS to this project.
 
 You should treat this like a real-world job assignment with your instructor as the client. Like in the real world, you may not be given all the information you need to complete the assignment up front. It is your responsibility to understand the requirements and ask questions if anything is unclear (UPER) before jumping into the code.
