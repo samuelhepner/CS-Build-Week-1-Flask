@@ -71,7 +71,7 @@ def login():
     if response is None:
         return jsonify(response), 500
     else:
-        return jsonify('Authorization: ', response.auth_key), 200
+        return jsonify(response), 200
 
 
 @app.route('/api/adv/init/', methods=['GET'])
