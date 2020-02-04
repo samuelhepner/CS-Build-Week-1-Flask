@@ -52,9 +52,9 @@ def register():
         return jsonify(response), 200
 
 # test endpoint
-@app.route('/', methods=['GET'])
-def test_method():
-    return 'Hello World'
+# @app.route('/', methods=['GET'])
+# def test_method():
+#     return 'Hello World'
 
 @app.route('/api/login/', methods=['POST'])
 def login():
@@ -140,6 +140,7 @@ def take_item():
             print('THIS IS THE ITEM: ', item.name)
             return jsonify(f"You have picked up {item.name}"), 200
 
+
 @app.route('/api/adv/drop/', methods=['POST'])
 def drop_item():
     # IMPLEMENT THIS
@@ -157,6 +158,7 @@ def drop_item():
     for item in inventory:
         if item.name.lower() == values['item_name'].lower():
             player.inventory.remove(item)
+            player.current_room.items.append(item)
             return jsonify(f"You have dropped {item.name}"), 200
         else:
             return jsonify('Item not found'), 500
