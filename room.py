@@ -1,7 +1,10 @@
 # Implement a class to hold room information. This should have name and
 # description attributes.
+
+from store import Store
+
 class Room:
-    def __init__(self, name, description, id=0, x=None, y=None, items=[]):
+    def __init__(self, name, description, id=0, x=None, y=None, items=[], store=None):
         self.id = id
         self.name = name
         self.description = description
@@ -12,6 +15,7 @@ class Room:
         self.x = x
         self.y = y
         self.items = items
+        self.store = store
     def get_exits(self):
         exits = []
         if self.n_to is not None:

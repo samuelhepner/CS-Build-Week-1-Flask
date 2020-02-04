@@ -1,6 +1,7 @@
 from room import Room
 from player import Player
 from store import Store
+from items import Item
 import random
 import math
 import bcrypt
@@ -54,10 +55,10 @@ class World:
         # Should create 100 procuedurally generated rooms
         self.rooms = {
             'outside':  Room("Outside Cave Entrance",
-                             "North of you, the cave mount beckons", 1, 1, 1),
+                             "North of you, the cave mount beckons", 1, 1, 1, items=[Item('Torch', 'Lights the way', price=1)]),
 
             'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-        passages run north and east.""", 2, 1, 2),
+        passages run north and east.""", 2, 1, 2, items=[Item('Torch', 'Lights the way', price=1)], store=Store()),
 
             'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
         into the darkness. Ahead to the north, a light flickers in
