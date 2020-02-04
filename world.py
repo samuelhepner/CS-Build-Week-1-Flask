@@ -46,7 +46,7 @@ class World:
             return None
         password_hash = bcrypt.hashpw(password.encode() ,self.password_salt)
         if user.password_hash == password_hash:
-            return user
+            return {'key': user.auth_key}
         return None
 
     def create_world(self):
