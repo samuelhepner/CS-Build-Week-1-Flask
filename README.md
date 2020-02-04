@@ -21,28 +21,28 @@
 ### Authentication
 | Method | Endpoint | Body | Description |
 | ----- | ----------------- | -------------------- | ------------------ |
-| POST | `/api/registration` | username, password1, password2 | N/A |
-| POST | `/api/login` | username, password | N/A |
+| POST | `/api/registration` | username, password1, password2 | Returns authentication key. |
+| POST | `/api/login` | username, password | Returns authentication key. |
 
-### Initialize
+### Initialize (Requires Authentication Key)
 | Method | Endpoint | Body | Description |
 | ----- | ----------------- | -------------------- | ------------------ |
 | GET | `/api/adv/init` | N/A | Tells you your current location. |
 
-### Movement
+### Movement (Requires Authentication Key)
 | Method | Endpoint | Body | Description |
 | ----- | ----------------- | -------------------- | ------------------ |
 | POST | `/api/adv/move` | direction | ("n", "s", "e", "w") |
 
-### Items
+### Items (Requires Authentication Key)
 | Method | Endpoint | Body | Description |
 | ----- | ----------------- | -------------------- | ------------------ |
 | POST | `/api/adv/take` | item_name | Picks up an item in your current room. |
 | POST | `/api/adv/drop` | item_name | Drops an item in your current room. |
-| GET | `/api/adv/inventory` | item_name | Checks your inventory. |
+| GET | `/api/adv/inventory` | N/A | Checks your inventory. |
 | POST | `/api/adv/buy` | item_name | Buys an item from the store. You must be in the same room as the store. |
 | POST | `/api/adv/sell` | item_name | Sells an item to the store. You must be in the same room as the store. |
-| GET | `/api/adv/store` | item_name | Checks the stock of the store and how much money the store has. You must be in the same room as the store. |
+| GET | `/api/adv/store` | N/A | Checks the stock of the store and how much money the store has. You must be in the same room as the store. |
 
 ## Directions
 

@@ -189,6 +189,7 @@ def inventory():
     
     return jsonify({'Inventory': response}), 200
 
+
 @app.route('/api/adv/buy/', methods=['POST'])
 def buy_item():
     # IMPLEMENT THIS
@@ -241,6 +242,7 @@ def sell_item():
             else:
                 return jsonify('Store does not have enough gold coins to buy that item from you.'), 500
 
+
 @app.route('/api/adv/store', methods=['GET'])
 def check_store():
     player = get_player_by_header(world, request.headers.get("Authorization"))
@@ -264,6 +266,7 @@ def check_store():
             response.append({'name': stock[i].name, 'description': stock[i].description, 'price': stock[i].price})
     
     return jsonify({'Stock': response}), 200
+
 
 @app.route('/api/adv/rooms/', methods=['GET'])
 def rooms():
