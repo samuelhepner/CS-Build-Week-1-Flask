@@ -27,7 +27,7 @@
 ### Initialize (Requires Authentication Key)
 | Method | Endpoint | Body | Description |
 | ----- | ----------------- | -------------------- | ------------------ |
-| GET | `/api/adv/init` | N/A | Tells you your current location. |
+| GET | `/api/adv/init` | N/A | Tells you your current location and which exits are possible. |
 
 ### Movement (Requires Authentication Key)
 | Method | Endpoint | Body | Description |
