@@ -10,6 +10,8 @@ from decouple import config
 from room import Room
 from player import Player
 from world import World
+from items import Item, Food, Weapon
+from store import Store
 
 # Look up decouple for config variables
 # pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
@@ -85,6 +87,7 @@ def init():
         'title': player.current_room.name,
         'description': player.current_room.description,
     }
+    print('THIS IS THE ROOM: ', player.current_room)
     return jsonify(response), 200
 
 
@@ -119,20 +122,69 @@ def move():
 @app.route('/api/adv/take/', methods=['POST'])
 def take_item():
     # IMPLEMENT THIS
-    response = {'error': "Not implemented"}
-    return jsonify(response), 400
+    # {
+    #   "item":"{Item()}"
+    # }
+
+    player = get_player_by_header(world, request.headers.get("Authorization"))
+    if player is None:
+        response = {'error': "Malformed auth header"}
+        return response, 500
+
+    item = get_item_by_name
+    values = request.get_json()
+    
+    player.inventory.append(values['item'])
+    print('THIS IS THE ITEM: ', values['item'])
+    return jsonify(f"You have picked up {values['item']['name']}"), 200
 
 @app.route('/api/adv/drop/', methods=['POST'])
 def drop_item():
     # IMPLEMENT THIS
-    response = {'error': "Not implemented"}
-    return jsonify(response), 400
+    # {
+    #   "item":"{name: "Short sword", price: 5, description: "It's sharp."}"
+    # }
+    player = get_player_by_header(world, request.headers.get("Authorization"))
+    if player is None:
+        response = {'error': "Malformed auth header"}
+        return response, 500
+
+    values = request.get_json()
+    
+    if values['item'] not in player.inventory:
+        response= {"error": "That item does not exist"}
+        return jsonify(response), 500
+    else:
+        player.inventory.remove(values['item'])
+        return jsonify(f"You have dropped {values['item']['name']}"), 200
+        
+
+
 
 @app.route('/api/adv/inventory/', methods=['GET'])
 def inventory():
     # IMPLEMENT THIS
-    response = {'error': "Not implemented"}
-    return jsonify(response), 400
+    player = get_player_by_header(world, request.headers.get("Authorization"))
+    if player is None:
+        response = {'error': "Malformed auth header"}
+        return response, 500
+    
+    # response = {
+    #     'name': player.coin_purse,
+    #     'description': 
+    # }
+    response = []
+    for i in range(len(player.inventory)):
+        if (type(player.inventory[i]) is Weapon):
+            response.append({'name': player.inventory[i].name, 'description': player.inventory[i].description, 'price': player.inventory[i].price, 'weapon_type': player.inventory[i].weapon_type, 
+                            'damage': player.inventory[i].damage})
+        elif (type(player.inventory[i]) is Food):
+            response.append({'name': player.inventory[i].name, 'description': player.inventory[i].description, 'price': player.inventory[i].price, 'food_type': player.inventory[i].food_type, 
+                            'healing_amount': player.inventory[i].healing_amount})
+        else:
+            response.append({'name': player.inventory[i].name, 'description': player.inventory[i].description, 'price': player.inventory[i].price})
+    
+    return jsonify({'Inventory': response}), 200
 
 @app.route('/api/adv/buy/', methods=['POST'])
 def buy_item():

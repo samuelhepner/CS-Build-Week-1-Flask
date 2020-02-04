@@ -11,12 +11,6 @@ class Player:
         self.uuid = uuid.uuid4
         self.coin_purse = coin_purse
         self.inventory = inventory
-
-    def pick_up(self):
-        print(f"You have picked up {self.inventory[0].name}")
-
-    def drop(self):
-        print(f"You have dropped {self.inventory[0].name}")
      
     def __generate_auth_key():
         digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
