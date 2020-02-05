@@ -28,6 +28,9 @@ item_list = [Item('Pile of Gold', 'Contains several coins', 20),
 
 class World:
     def __init__(self):
+        self.grid = None
+        self.width = 0
+        self.height = 0
         self.starting_room = None
         self.rooms = {}
         self.players = {}
@@ -99,6 +102,15 @@ class World:
         self.rooms['narrow'].connect_rooms('n', self.rooms['treasure'])
 
         self.starting_room = self.rooms['outside']
+
+        # Initializing the grid
+        self.grid = [None] * 10
+        self.width = 10
+        self.height = 10
+        for i in range(len(self.grid)):
+            self.grid[i] = [None] * self.width
+
+        
 
 
     def print_rooms(self):
