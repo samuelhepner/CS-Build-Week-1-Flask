@@ -1,10 +1,25 @@
 from room import Room
 from player import Player
 from store import Store
-from items import Item
+from items import Item, Weapon, Food
 import random
 import math
 import bcrypt
+
+
+item_list = [Item('Pile of Gold', 'Contains several coins', 20),
+            Item('Ring', 'Size 8', 15), Item('Gem', 'Beautifully polished', 50),
+            Item('Crown', 'Used to adorn royalty', 150), Item('Scroll', 'Just says kek', 1),
+            Item('Potion', 'Used to increase health', 25), Item('Dice', 'YAHTZEE!', 2),
+            Weapon('Silver Sword', "A Witcher's favorite", 20, 'sword', 100),
+            Weapon('Wooden Spear', 'Longer than a sword', 25, 'spear', 15),
+            Weapon('Wooden Shield', 'Good against arrows', 13, 'shield', 3),
+            Weapon('Heavy Book', 'Use the power of knowledge!', 5, 'Book', 1),
+            Weapon('Thick rope', 'Very short range weapon', 2, 'rope', 60),
+            Weapon('Battle Axe', 'Small stick, big blade', 20, 'axe', 25),
+            Food('Apple', 'Red fruit', 2, 'small', 5), Food('Mushroom', 'Probably not poisened', 1, 'small', 1),
+            Food('Root', 'Yum...fiber', 1, 'healthy', 15), Food('Green Leaf', 'You need the nutrients', 1, 'healthy', 15),
+            Food('Berries', 'Berries on a stick', 5, 'healthy', 10)]
 
 class World:
     def __init__(self):
@@ -79,3 +94,54 @@ class World:
         self.rooms['narrow'].connect_rooms('n', self.rooms['treasure'])
 
         self.starting_room = self.rooms['outside']
+
+
+    def print_rooms(self):
+        '''
+        Print the rooms in room_grid in ascii characters.
+        '''
+        # Add top border
+        str = "# " * ((3 + self.width * 5) // 2) + "\n"
+        # The console prints top to bottom but our array is arranged
+        # bottom to top.
+        #
+        # We reverse it so it draws in the right direction.
+        reverse_grid = list(self.grid) # make a copy of the list
+        reverse_grid.reverse()
+        for row in reverse_grid:
+            # PRINT NORTH CONNECTION ROW
+            str += "#"
+            for room in row:
+                if room is not None and room.n_to != 0:
+                    str += "  |  "
+                else:
+                    str += "     "
+            str += "#\n"
+            # PRINT ROOM ROW
+            str += "#"
+            for room in row:
+                if room is not None and room.w_to != 0:
+                    str += "-"
+                else:
+                    str += " "
+                if room is not None:
+                    str += f"{room.id}".zfill(3)
+                else:
+                    str += "   "
+                if room is not None and room.e_to != 0:
+                    str += "-"
+                else:
+                    str += " "
+            str += "#\n"
+            # PRINT SOUTH CONNECTION ROW
+            str += "#"
+            for room in row:
+                if room is not None and room.s_to != 0:
+                    str += "  |  "
+                else:
+                    str += "     "
+            str += "#\n"
+        # Add bottom border
+        str += "# " * ((3 + self.width * 5) // 2) + "\n"
+        # Print string
+        print(str)
