@@ -4,6 +4,7 @@ from time import time
 from uuid import uuid4
 
 from flask import Flask, jsonify, request, render_template
+from flask_cors import CORS, cross_origin
 # from pusher import Pusher
 from decouple import config
 
@@ -19,6 +20,8 @@ from store import Store
 world = World()
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS']= 'Content-Type'
 
 def get_player_by_header(world, auth_header):
     if auth_header is None:
@@ -77,6 +80,7 @@ def login():
 
 
 @app.route('/api/adv/init/', methods=['GET'])
+@cross_origin()
 def init():
     player = get_player_by_header(world, request.headers.get("Authorization"))
     if player is None:
