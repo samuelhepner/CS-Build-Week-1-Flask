@@ -3,7 +3,7 @@ import json
 from time import time
 from uuid import uuid4
 
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, make_response
 from flask_cors import CORS, cross_origin
 # from pusher import Pusher
 from decouple import config
@@ -20,7 +20,7 @@ from store import Store
 world = World()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+# CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 def get_player_by_header(world, auth_header):
@@ -36,6 +36,11 @@ def get_player_by_header(world, auth_header):
 
 
 @app.route('/api/registration/', methods=['POST'])
+def header():
+    resp = make_response()
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
+    
 def register():
     values = request.get_json()
     required = ['username', 'password1', 'password2']
@@ -55,9 +60,9 @@ def register():
         return jsonify(response), 200
 
 # test endpoint
-# @app.route('/', methods=['GET'])
-# def test_method():
-#     return 'Hello World'
+@app.route('/', methods=['GET'])
+def test_method():
+    return 'Welcome Adventurer'
 
 @app.route('/api/login/', methods=['POST'])
 def login():
