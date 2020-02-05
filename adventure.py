@@ -20,7 +20,7 @@ from store import Store
 world = World()
 
 app = Flask(__name__)
-# cors = CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 def get_player_by_header(world, auth_header):
@@ -36,7 +36,6 @@ def get_player_by_header(world, auth_header):
 
 
 @app.route('/api/registration/', methods=['POST'])
-@cross_origin()
 def register():
     values = request.get_json()
     required = ['username', 'password1', 'password2']
@@ -61,7 +60,6 @@ def register():
 #     return 'Hello World'
 
 @app.route('/api/login/', methods=['POST'])
-@cross_origin()
 def login():
     # IMPLEMENT THIS
     values = request.get_json()
@@ -82,7 +80,6 @@ def login():
 
 
 @app.route('/api/adv/init/', methods=['GET'])
-@cross_origin()
 def init():
     player = get_player_by_header(world, request.headers.get("Authorization"))
     if player is None:
@@ -100,7 +97,6 @@ def init():
 
 
 @app.route('/api/adv/move/', methods=['POST'])
-@cross_origin()
 def move():
     player = get_player_by_header(world, request.headers.get("Authorization"))
     if player is None:
@@ -129,7 +125,6 @@ def move():
 
 
 @app.route('/api/adv/take/', methods=['POST'])
-@cross_origin()
 def take_item():
     # IMPLEMENT THIS
     # {
@@ -152,7 +147,6 @@ def take_item():
 
 
 @app.route('/api/adv/drop/', methods=['POST'])
-@cross_origin()
 def drop_item():
     # IMPLEMENT THIS
     # {
@@ -176,7 +170,6 @@ def drop_item():
 
 
 @app.route('/api/adv/inventory/', methods=['GET'])
-@cross_origin()
 def inventory():
     # IMPLEMENT THIS
     player = get_player_by_header(world, request.headers.get("Authorization"))
@@ -203,7 +196,6 @@ def inventory():
 
 
 @app.route('/api/adv/buy/', methods=['POST'])
-@cross_origin()
 def buy_item():
     # IMPLEMENT THIS
     player = get_player_by_header(world, request.headers.get("Authorization"))
@@ -230,7 +222,6 @@ def buy_item():
                 
 
 @app.route('/api/adv/sell/', methods=['POST'])
-@cross_origin()
 def sell_item():
     # IMPLEMENT THIS
     player = get_player_by_header(world, request.headers.get("Authorization"))
@@ -258,7 +249,6 @@ def sell_item():
 
 
 @app.route('/api/adv/store', methods=['GET'])
-@cross_origin()
 def check_store():
     player = get_player_by_header(world, request.headers.get("Authorization"))
     if player is None:
@@ -284,7 +274,6 @@ def check_store():
 
 
 @app.route('/api/adv/rooms/', methods=['GET'])
-@cross_origin()
 def rooms():
     # IMPLEMENT THIS
     response = {'error': "Not implemented"}
