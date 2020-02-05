@@ -20,8 +20,8 @@ from store import Store
 world = World()
 
 app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS']= 'Content-Type'
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
+# app.config['CORS_HEADERS'] = 'Content-Type'
 
 def get_player_by_header(world, auth_header):
     if auth_header is None:
@@ -79,8 +79,7 @@ def login():
         return jsonify(response), 200
 
 
-@app.route('/api/adv/init/', methods=['GET'])
-@cross_origin()
+@app.route('/api/adv/init/', methods=['GET', 'OPTIONS'])
 def init():
     player = get_player_by_header(world, request.headers.get("Authorization"))
     if player is None:
