@@ -79,7 +79,7 @@ def login():
         return jsonify(response), 200
 
 
-@app.route('/api/adv/init/', methods=['GET', 'OPTIONS'])
+@app.route('/api/adv/init/', methods=['GET'])
 def init():
     player = get_player_by_header(world, request.headers.get("Authorization"))
     if player is None:
