@@ -25,6 +25,13 @@ CORS(app, supports_credentials = True)
 app.config['CORS_ALLOW_HEADERS'] = "Content-Type"
 app.config['CORS_RESOURCES'] = {r"/": {"origins": "https://client-lilac.now.sh/"}}
 
+# @app.after_request
+# def after_request(response):
+#     response.headers.add('Access-Control-Allow-Origin', '*')
+#     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+#     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+#     return response
+
 
 def get_player_by_header(world, auth_header):
     if auth_header is None:
@@ -65,7 +72,7 @@ def register():
         # response = world.add_player(username, password1, password2)
 
         if 'error' in response:
-            return jsonify(response), 500
+            return jsonify("Registration error", response), 500
         else:
             return jsonify(response), 200
 
