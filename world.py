@@ -9,6 +9,7 @@ import pandas as pd
 
 
 levels = pd.read_csv('room-info.csv')
+print(levels[0])
 # for i in range(len(levels)):
 #     print(levels[i]['name'], levels[i]['description'][i])
 
@@ -103,7 +104,7 @@ class World:
         
         # self.starting_room = self.rooms['outside']
         
-
+        # Code from Brett that has been partially modified
         # Initializing the grid
         self.grid = [None] * 10
         self.width = 10
@@ -121,7 +122,7 @@ class World:
         previous_room = None
         while room_count < 100:
             # Calculate the direction of the room to be created
-            if direction > 0 and x < 10 - 1:
+            if direction > 0 and x < 9:
                 room_direction = "e"
                 x += 1
             elif direction < 0 and x > 0:
@@ -133,8 +134,8 @@ class World:
                 y += 1
                 direction *= -1
             # Create a room in the given direction
-            #
-            room = Room(levels[room_count]['name'], levels[room_count]['description'], room_count, x, y)
+            # Need to figure out how to do store and Treasure room
+            room = Room(levels[room_count]['name'], levels[room_count]['description'], room_count, x, y, items=[random.choice(item_list), random.choice(item_list)])
             self.grid[y][x] = room
             # room.save()
             # Connect the new room to the previous room
