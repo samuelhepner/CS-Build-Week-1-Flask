@@ -20,9 +20,9 @@ from store import Store
 world = World()
 
 app = Flask(__name__)
-CORS(app, supports_credentials = True)
-app.config['CORS_ALLOW_HEADERS'] = "Content-Type"
-app.config['CORS_RESOURCES'] = {r"/": {"origins": "*"}}
+# CORS(app, supports_credentials = True)
+# app.config['CORS_ALLOW_HEADERS'] = "Content-Type"
+# app.config['CORS_RESOURCES'] = {r"/": {"origins": "*"}}
 
 
 def get_player_by_header(world, auth_header):
@@ -50,10 +50,13 @@ def register():
     password1 = values.get('password1')
     password2 = values.get('password2')
 
-    # response = make_response(world.add_player(username, password1, password2))
-    # response.headers['Access-Control-Allow-Origin'] = '*'
+    response = make_response(world.add_player(username, password1, password2))
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "*")
+    response.headers.add("Access-Control-Allow-Methods", "*")
 
-    response = world.add_player(username, password1, password2)
+
+    # response = world.add_player(username, password1, password2)
 
     if 'error' in response:
         return jsonify(response), 500
