@@ -39,11 +39,11 @@ def get_player_by_header(world, auth_header):
 
 @app.route('/api/registration/', methods=['POST', 'OPTIONS'])
 def register():
-    if request.method == "OPTIONS":
+    if request.method == 'OPTIONS':
         response = make_response()
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        response.headers.add('Access-Control-Allow-Headers', "*")
-        response.headers.add('Access-Control-Allow-Methods', "*")
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Headers'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = '*'
         return response
 
     else:
