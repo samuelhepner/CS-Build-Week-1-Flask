@@ -5,7 +5,7 @@ from uuid import uuid4
 
 from flask import Flask, jsonify, request, render_template, make_response
 from flask_cors import CORS, cross_origin
-from pusher import Pusher
+# from pusher import Pusher
 from decouple import config
 
 from room import Room
