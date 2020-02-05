@@ -20,9 +20,10 @@ from store import Store
 world = World()
 
 app = Flask(__name__)
-# CORS(app, supports_credentials = True)
-# app.config['CORS_ALLOW_HEADERS'] = "Content-Type"
-# app.config['CORS_RESOURCES'] = {r"/": {"origins": "*"}}
+
+CORS(app, supports_credentials = True)
+app.config['CORS_ALLOW_HEADERS'] = "Content-Type"
+app.config['CORS_RESOURCES'] = {r"/": {"origins": "https://client-lilac.now.sh/"}}
 
 
 def get_player_by_header(world, auth_header):
@@ -44,7 +45,7 @@ def register():
         response.headers['Access-Control-Allow-Origin'] = '*'
         response.headers['Access-Control-Allow-Headers'] = '*'
         response.headers['Access-Control-Allow-Methods'] = '*'
-        return response
+        return response, 200
 
     else:
         values = request.get_json()
