@@ -99,7 +99,7 @@ class World:
         self.rooms['foyer'].connect_rooms('e', self.rooms['narrow'])
         self.rooms['narrow'].connect_rooms('n', self.rooms['treasure'])
         
-        # self.starting_room = self.rooms['outside']
+        self.starting_room = self.rooms['outside']
         
         # Code from Brett that has been partially modified
         # Initializing the grid
