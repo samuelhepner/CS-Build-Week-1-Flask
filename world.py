@@ -9,9 +9,6 @@ import pandas as pd
 
 
 # levels = pd.read_csv('room-info.csv')
-# print(levels[0])
-# for i in range(len(levels)):
-#     print(levels[i]['name'], levels[i]['description'][i])
 
 item_list = [Item('Pile of Gold', 'Contains several coins', 20),
             Item('Ring', 'Size 8', 15), Item('Gem', 'Beautifully polished', 50),
