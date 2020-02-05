@@ -45,36 +45,35 @@ def get_player_by_header(world, auth_header):
     return player
 
 
-@app.route('/api/registration/', methods=['POST', 'OPTIONS'])
+@app.route('/api/registration/', methods=['POST'])
 def register():
-    if request.method == 'OPTIONS':
-        response = make_response()
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        response.headers['Access-Control-Allow-Headers'] = '*'
-        response.headers['Access-Control-Allow-Methods'] = '*'
-        return response, 200
+    # if request.method == 'OPTIONS':
+    #     response = make_response()
+    #     response.headers['Access-Control-Allow-Origin'] = '*'
+    #     response.headers['Access-Control-Allow-Headers'] = '*'
+    #     response.headers['Access-Control-Allow-Methods'] = '*'
+    #     return response, 200
 
+    values = request.get_json()
+    required = ['username', 'password1', 'password2']
+
+    if not all(k in values for k in required):
+        response = {'message': "Missing Values"}
+        return jsonify(response), 400
+
+    username = values.get('username')
+    password1 = values.get('password1')
+    password2 = values.get('password2')
+
+    # response = make_response(world.add_player(username, password1, password2))
+    # response.headers['Access-Control-Allow-Origin'] = '*'
+
+    response = world.add_player(username, password1, password2)
+
+    if 'error' in response:
+        return jsonify("Registration error", response), 500
     else:
-        values = request.get_json()
-        required = ['username', 'password1', 'password2']
-
-        if not all(k in values for k in required):
-            response = {'message': "Missing Values"}
-            return jsonify(response), 400
-
-        username = values.get('username')
-        password1 = values.get('password1')
-        password2 = values.get('password2')
-
-        response = make_response(world.add_player(username, password1, password2))
-        response.headers['Access-Control-Allow-Origin'] = '*'
-
-        # response = world.add_player(username, password1, password2)
-
-        if 'error' in response:
-            return jsonify("Registration error", response), 500
-        else:
-            return jsonify(response), 200
+        return jsonify(response), 200
 
 # test endpoint
 @app.route('/', methods=['GET'])
