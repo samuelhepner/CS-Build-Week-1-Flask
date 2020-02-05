@@ -21,16 +21,16 @@ world = World()
 
 app = Flask(__name__)
 
-CORS(app, supports_credentials = True)
-app.config['CORS_ALLOW_HEADERS'] = "Content-Type"
-app.config['CORS_RESOURCES'] = {r"/": {"origins": "https://client-lilac.now.sh/"}}
+# CORS(app, supports_credentials = True)
+# app.config['CORS_ALLOW_HEADERS'] = "Content-Type"
+# app.config['CORS_RESOURCES'] = {r"/": {"origins": "https://client-lilac.now.sh/"}}
 
-# @app.after_request
-# def after_request(response):
-#     response.headers.add('Access-Control-Allow-Origin', '*')
-#     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-#     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-#     return response
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
 
 
 def get_player_by_header(world, auth_header):
