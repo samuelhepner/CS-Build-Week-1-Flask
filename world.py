@@ -5,7 +5,12 @@ from items import Item, Weapon, Food
 import random
 import math
 import bcrypt
+import pandas as pd
 
+
+levels = pd.read_csv('room-info.csv')
+for i in range(len(levels)):
+    print(levels[i]['name'], levels[i]['description'][i])
 
 item_list = [Item('Pile of Gold', 'Contains several coins', 20),
             Item('Ring', 'Size 8', 15), Item('Gem', 'Beautifully polished', 50),
@@ -17,7 +22,7 @@ item_list = [Item('Pile of Gold', 'Contains several coins', 20),
             Weapon('Heavy Book', 'Use the power of knowledge!', 5, 'Book', 1),
             Weapon('Thick rope', 'Very short range weapon', 2, 'rope', 60),
             Weapon('Battle Axe', 'Small stick, big blade', 20, 'axe', 25),
-            Food('Apple', 'Red fruit', 2, 'small', 5), Food('Mushroom', 'Probably not poisened', 1, 'small', 1),
+            Food('Apple', 'Red fruit', 2, 'small', 5), Food('Mushroom', 'Probably not poisoned', 1, 'small', 1),
             Food('Root', 'Yum...fiber', 1, 'healthy', 15), Food('Green Leaf', 'You need the nutrients', 1, 'healthy', 15),
             Food('Berries', 'Berries on a stick', 5, 'healthy', 10)]
 
