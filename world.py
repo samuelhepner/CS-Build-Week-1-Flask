@@ -8,7 +8,7 @@ import bcrypt
 import pandas as pd
 
 
-# levels = pd.read_csv('room-info.csv')
+levels = pd.read_csv('room-info.csv')
 
 item_list = [Item('Pile of Gold', 'Contains several coins', 20),
             Item('Ring', 'Size 8', 15), Item('Gem', 'Beautifully polished', 50),
@@ -26,13 +26,11 @@ item_list = [Item('Pile of Gold', 'Contains several coins', 20),
 
 class World:
     def __init__(self):
-        self.grid = None
-        self.width = 0
-        self.height = 0
         self.starting_room = None
         self.rooms = {}
         self.players = {}
-        self.create_world()
+        self.init_grid()
+        self.create_world2(100)
         self.password_salt = bcrypt.gensalt()
 
     def add_player(self, username, password1, password2):
@@ -71,80 +69,172 @@ class World:
             return {'key': user.auth_key}
         return None
 
+    def init_grid(self):
+        self.height = 20
+        self.grid = [None] * self.height
+        self.width = 20
+        self.previous_room = None
+        
+        for i in range(len(self.grid)):
+            self.grid[i] = [None] * self.width
+
+    def create_world2(self, num_rooms):
+        first_x = (self.width // 2) - 1 
+        first_y = (self.height // 2) - 1
+        x = (self.width // 2) - 1
+        y = (self.height // 2) - 1
+        room_count = 0
+        total_rooms = num_rooms
+        past_rooms_list = []
+        # Start generating rooms to the east
+        # While there are rooms to be created...
+        direction_list = [1, 2, 3, 4]
+        previous_room = None
+        while room_count < total_rooms:
+            if len(direction_list) > 0:
+                direction = random.choice(direction_list) # 1: North, 2: South, 3: East, 4: West
+
+            if len(direction_list) == 0:
+                while len(direction_list) == 0:
+                    random_past_coord = random.choice(past_rooms_list)
+                    print(random_past_coord)
+                    x = random_past_coord[0]
+                    y = random_past_coord[1]
+                    print(x, y)
+                    direction_list = [1, 2, 3, 4]
+                    direction = random.choice(direction_list) # 1: North, 2: South, 3: East, 4: West
+                    
+                        
+            # Calculate the direction of the room to be created
+            if (direction == 1):
+                # North
+                if ((y+1) < self.height and (y+1) > -1):
+                    if self.grid[y+1][x] is None:
+                        room_direction = 'n'
+                        room_count += 1
+                        y += 1
+                        direction_list = [1, 2, 3, 4]
+                        rand_num = random.randint(0, 14)
+                        room = Room(levels['name'][rand_num], levels['description'][rand_num], room_count, x, y, items=[random.choice(item_list), random.choice(item_list)])
+                        past_rooms_list.append([x,y])
+                        self.grid[y][x] = room
+                        if previous_room is not None:
+                            previous_room.connect_rooms(room_direction, room)
+                        previous_room = room
+                    else:
+                        direction_list.remove(1)
+                else:
+                    direction_list.remove(1)
+
+            elif (direction == 2):
+                # South
+                if (self.height > (y-1) and (y-1) > -1):
+                    if self.grid[y-1][x] is None:
+                        room_direction = 's'
+                        room_count += 1
+                        y -= 1
+                        direction_list = [1, 2, 3, 4]
+                        rand_num = random.randint(0, 14)
+                        room = Room(levels['name'][rand_num], levels['description'][rand_num], room_count, x, y, items=[random.choice(item_list), random.choice(item_list)])
+                        past_rooms_list.append([x,y])
+                        self.grid[y][x] = room
+                        if previous_room is not None:
+                            previous_room.connect_rooms(room_direction, room)
+                        previous_room = room
+                    else:
+                        direction_list.remove(2)
+                else:
+                    direction_list.remove(2)
+
+            elif (direction == 3):
+                # East
+                if (x+1) < self.width and (x+1) > -1:
+                    if self.grid[y][x+1] is None:
+                        room_direction = 'e'
+                        room_count += 1
+                        x += 1
+                        direction_list = [1, 2, 3, 4]
+                        rand_num = random.randint(0, 14)
+                        room = Room(levels['name'][rand_num], levels['description'][rand_num], room_count, x, y, items=[random.choice(item_list), random.choice(item_list)])
+                        past_rooms_list.append([x,y])
+                        self.grid[y][x] = room
+                        if previous_room is not None:
+                            previous_room.connect_rooms(room_direction, room)
+                        previous_room = room
+                    else:
+                        direction_list.remove(3)
+                else:
+                    direction_list.remove(3)
+
+            else:
+                # West
+                if (self.width > (x-1) and (x-1) > -1):
+                    if self.grid[y][x-1] is None:
+                        room_direction = 'w'
+                        room_count += 1
+                        x -= 1
+                        direction_list = [1, 2, 3, 4]
+                        rand_num = random.randint(0, 14)
+                        room = Room(levels['name'][rand_num], levels['description'][rand_num], room_count, x, y, items=[random.choice(item_list), random.choice(item_list)])
+                        past_rooms_list.append([x,y])
+                        self.grid[y][x] = room
+                        if previous_room is not None:
+                            previous_room.connect_rooms(room_direction, room)
+                        previous_room = room
+                    else:
+                        direction_list.remove(4)
+                else:
+                    direction_list.remove(4)   
+
+            print(f'room: {room.id}')
+            self.starting_room = self.grid[first_y][first_x]
+
+
     def create_world(self):
-        # UPDATE THIS:
-        # Should create 100 procuedurally generated rooms
-        self.rooms = {
-            'outside':  Room("Outside Cave Entrance",
-                             "North of you, the cave mount beckons", 1, 1, 1, items=[Item('Torch', 'Lights the way', price=1)]),
-
-            'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
-        passages run north and east.""", 2, 1, 2, items=[Item('Torch', 'Lights the way', price=1)], store=Store()),
-
-            'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
-        into the darkness. Ahead to the north, a light flickers in
-        the distance, but there is no way across the chasm.""", 3, 1, 3),
-
-            'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
-        to north. The smell of gold permeates the air.""", 4, 2, 2),
-
-            'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
-        chamber! Sadly, it has already been completely emptied by
-        earlier adventurers. The only exit is to the south.""", 5, 2, 3),
-        }
-
-        # Link rooms together
-        self.rooms['outside'].connect_rooms('n', self.rooms['foyer'])
-        self.rooms['foyer'].connect_rooms('n', self.rooms['overlook'])
-        self.rooms['foyer'].connect_rooms('e', self.rooms['narrow'])
-        self.rooms['narrow'].connect_rooms('n', self.rooms['treasure'])
-        
-        self.starting_room = self.rooms['outside']
-        
         # Code from Brett that has been partially modified
         # Initializing the grid
-        # self.grid = [None] * 10
-        # self.width = 10
-        # self.height = 10
-        # for i in range(len(self.grid)):
-        #     self.grid[i] = [None] * self.width
+        self.grid = [None] * 10
+        self.width = 10
+        self.height = 10
+        for i in range(len(self.grid)):
+            self.grid[i] = [None] * self.width
 
-        # # Start from lower-left corner (0,0)
-        # x = -1 # (this will become 0 on the first step)
-        # y = 0
-        # room_count = 0
-        # # Start generating rooms to the east
-        # direction = 1  # 1: east, -1: west
-        # # While there are rooms to be created...
-        # previous_room = None
-        # while room_count < 100:
-        #     # Calculate the direction of the room to be created
-        #     if direction > 0 and x < 9:
-        #         room_direction = "e"
-        #         x += 1
-        #     elif direction < 0 and x > 0:
-        #         room_direction = "w"
-        #         x -= 1
-        #     else:
-        #         # If we hit a wall, turn north and reverse direction
-        #         room_direction = "n"
-        #         y += 1
-        #         direction *= -1
-        #     # Create a room in the given direction
-        #     # Need to figure out how to do store and Treasure room
-        #     room = Room(levels[room_count]['name'], levels[room_count]['description'], room_count, x, y, items=[random.choice(item_list), random.choice(item_list)])
-        #     self.grid[y][x] = room
-        #     # room.save()
-        #     # Connect the new room to the previous room
-        #     if previous_room is not None:
-        #         previous_room.connectRooms(room_direction, room)
+        # Start from lower-left corner (0,0)
+        x = 4 # (this will become 0 on the first step)
+        y = 5
+        room_count = 0
+        # Start generating rooms to the east
+        direction = 1  # 1: east, -1: west
+        # While there are rooms to be created...
+        previous_room = None
+        while room_count < 5 :
+            # Calculate the direction of the room to be created
+            if direction > 0 and x < 9:
+                room_direction = "e"
+                x += 1
+            elif direction < 0 and x > 0:
+                room_direction = "w"
+                x -= 1
+            else:
+                # If we hit a wall, turn north and reverse direction
+                room_direction = "n"
+                y += 1
+                direction *= -1
+            # Create a room in the given direction
+            # Need to figure out how to do store and Treasure room
+            rand_num = random.randint(0, 14)
+            room = Room(levels['name'][rand_num], levels['description'][rand_num], room_count, x, y, items=[random.choice(item_list), random.choice(item_list)])
+            self.grid[y][x] = room
+            # room.save()
+            # Connect the new room to the previous room
+            if previous_room is not None:
+                previous_room.connect_rooms(room_direction, room)
                 
-        #     # Update iteration variables
-        #     previous_room = room
-        #     room_count += 1
-        #     print(f'room: {room}')
-        #     self.starting_room = self.grid[0][0]
-
+            # Update iteration variables
+            previous_room = room
+            room_count += 1
+            print(f'room: {room}')
+            self.starting_room = self.grid[0][0]
 
     def print_rooms(self):
         '''
@@ -195,3 +285,6 @@ class World:
         str += "# " * ((3 + self.width * 5) // 2) + "\n"
         # Print string
         print(str)
+
+world = World()
+world.print_rooms()

@@ -108,11 +108,11 @@ def init():
         return response, 500
 
     response = {
-        'id': player.current_room.id,
+        # 'id': player.current_room.id,
         'title': player.current_room.name,
         'description': player.current_room.description,
         'exits': player.current_room.get_exits(),
-        'items': player.current_room.items
+        'items': player.current_room.get_items()
     }
     # print('THIS IS THE ROOM: ', player.current_room)
     return jsonify(response), 200

@@ -1,16 +1,16 @@
-i, name, description
-0, Silver Treasure room, Only one way in/out and the Silver treasure chest is all yours!
-1, Archipelago room, Be careful! Store straight ahead
-2, Store room 2, Around the corner is the store
-3, Fun room, I hope you don't get dizzy easily
-4, Apple tree room 1, Relax and enjoy an apple!
-5, Store room 3, the store is in the bottom right
-6, Store room 4, the store is kinda in the middle
-7, Mushroom/tomato room, what better place for a garden
-8, Store room 5, Store is on the small island
-9, Bridge room, Don't look down
-10, Bronze Treasure room, Only one way in/out and the Silver treasure chest is all yours!
-11, Apple tree room 2, Relax and enjoy an apple!
-12, Dead Tree and Rocks room, Everything around you is dead (I'd get out of this room quicklys)
-13, Bronze Treasure room, Only one way in/out and the Silver treasure chest is all yours!
-14, Silver Treasure room, Only one way in/out and the Silver treasure chest is all yours!
+name,description
+"Silver Treasure room","Only one way in/out and the Silver treasure chest is all yours!"
+"Archipelago room","Be careful! Store straight ahead"
+"Store room 2","Around the corner is the store"
+"Fun room","I hope you don't get dizzy easily"
+"Apple tree room 1","Relax and enjoy an apple!"
+"Store room 3","The store is in the bottom right"
+"Store room 4","The store is kinda in the middle"
+"Mushroom/tomato room","What better place for a garden"
+"Store room 5","Store is on the small island"
+"Bridge room","Don't look down"
+"Bronze Treasure room","Only one way in/out and the Silver treasure chest is all yours!"
+"Apple tree room 2","Relax and enjoy an apple!"
+"Dead Tree and Rocks room","Everything around you is dead (I'd get out of this room quicklys)"
+"Bronze Treasure room","Only one way in/out and the Silver treasure chest is all yours!"
+"Silver Treasure room","Only one way in/out and the Silver treasure chest is all yours!"
