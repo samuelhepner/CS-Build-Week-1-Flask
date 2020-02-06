@@ -28,6 +28,12 @@ class Room:
         if self.e_to is not None:
             exits.append("e")
         return exits
+    
+    def get_items(self):
+        item_names = []
+        for item in self.items:
+            item_names.append(item.name)
+        return item_names
 
     def connect_rooms(self, direction, connecting_room):
         if direction == "n":
