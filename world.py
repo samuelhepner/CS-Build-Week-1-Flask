@@ -83,13 +83,16 @@ class World:
         first_y = (self.height // 2) - 1
         x = (self.width // 2) - 1
         y = (self.height // 2) - 1
-        room_count = 0
+        room_count = 1
         total_rooms = num_rooms
         past_rooms_list = []
         # Start generating rooms to the east
         # While there are rooms to be created...
         direction_list = [1, 2, 3, 4]
-        previous_room = None
+        rand_num = random.randint(0, 14)
+        self.starting_room = Room(levels['name'][rand_num], levels['description'][rand_num], room_count, first_x, first_y, items=[random.choice(item_list), random.choice(item_list)])
+        previous_room = self.starting_room
+
         while room_count < total_rooms:
             if len(direction_list) > 0:
                 direction = random.choice(direction_list) # 1: North, 2: South, 3: East, 4: West
@@ -187,7 +190,7 @@ class World:
                     direction_list.remove(4)   
 
             print(f'room: {room.id}')
-            self.starting_room = self.grid[first_y][first_x]
+            print(self.starting_room)
 
 
     def create_world(self):
