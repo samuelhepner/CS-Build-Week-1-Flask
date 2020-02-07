@@ -315,13 +315,12 @@ def say():
     if player is None:
         response = {'error': "Malformed auth header"}
         return response, 500
-        
+
     try:
         values = request.get_json()
-        username = values.get('username')
         message = values.get('message')
-        pusher.trigger('chat-channel', 'new-message', {'username': username, 'message': message})
-        return jsonify({'result': 'success'}), 200
+        pusher.trigger('chat-channel', 'new-message', {'username': player.username, 'message': message})
+        return jsonify({'result': f'{player.username} says: "{message}"'}), 200
     except:
         return jsonify({'result': 'failure'}), 500
 
