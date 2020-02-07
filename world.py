@@ -83,7 +83,7 @@ class World:
         first_y = (self.height // 2) - 1
         x = (self.width // 2) - 1
         y = (self.height // 2) - 1
-        room_count = 0
+        room_count = 1
         total_rooms = num_rooms
         past_rooms_list = []
         rooms_list = []
@@ -92,6 +92,8 @@ class World:
         direction_list = [1, 2, 3, 4]
         rand_num = random.randint(0, 12)
         self.starting_room = Room(levels['name'][rand_num], levels['description'][rand_num], room_count, first_x, first_y, items=[random.choice(item_list), random.choice(item_list)])
+        self.grid[first_y][first_x] = self.starting_room
+        rooms_list.append(self.starting_room)
         previous_room = self.starting_room
 
         while room_count < total_rooms:
@@ -200,20 +202,22 @@ class World:
         for y in range(self.height):
             for x in range(self.width):
                 if(self.grid[y][x] is not None):
-                    print(self.width)
-                    print(self.height)
-                    if (self.height > (y+1) and (y-1) > -1 and (x+1) < self.width and (x-1) > -1):
-                        room = self.grid[y][x]
+                    # print(self.width, '+', self.height)
+                    if ((y+1) < self.height and (y-1) >= 0 and (x+1) < self.width and (x-1) >= 0):
                         if (self.grid[y+1][x] is not None):
+                            room = self.grid[y][x]
                             north = self.grid[y+1][x]
                             room.connect_rooms('n', north)
                         if (self.grid[y-1][x] is not None):
+                            room = self.grid[y][x]
                             south = self.grid[y-1][x]
                             room.connect_rooms('s', south)
                         if (self.grid[y][x+1] is not None):
+                            room = self.grid[y][x]
                             east = self.grid[y][x+1]
                             room.connect_rooms('e', east)
                         if (self.grid[y][x-1] is not None):
+                            room = self.grid[y][x]
                             west = self.grid[y][x-1]
                             room.connect_rooms('w', west)
 
