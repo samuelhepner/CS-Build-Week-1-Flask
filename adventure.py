@@ -223,7 +223,7 @@ def inventory():
         else:
             response.append({'name': player.inventory[i].name, 'description': player.inventory[i].description, 'price': player.inventory[i].price})
     
-    return jsonify({'Inventory': response}), 200
+    return jsonify({'Inventory': response, 'Money': player.coin_purse}), 200
 
 
 @app.route('/api/adv/buy/', methods=['POST'])
