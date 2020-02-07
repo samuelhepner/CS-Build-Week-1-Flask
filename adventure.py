@@ -74,8 +74,7 @@ def register():
         return jsonify("Registration error", response), 500
     else:
         pusher.trigger(
-            u'world', u'joined',
-            {'global': "{} Has joined the game".format(username)}
+            'world', 'joined', {'pusher': f"{username} has joined the game"}
         )
         return jsonify(response), 200
 
@@ -102,8 +101,7 @@ def login():
         return jsonify(response), 500
     else:
         pusher.trigger(
-            u'world', u'joined',
-            {'global': "{} Has joined the game".format(username)}
+            'world', 'joined', {'pusher': f"{username} has joined the game"}
         )
         return jsonify(response), 200
 
@@ -304,7 +302,7 @@ def check_store():
     return jsonify({'Stock': response}), 200
 
 
-@app.route('/api/adv/rooms/', methods=['GET'])
+@app.route('/api/adv/rooms', methods=['GET'])
 def rooms():
     # IMPLEMENT THIS
     response = {'rooms': world.print_rooms()}
@@ -313,12 +311,16 @@ def rooms():
 
 @app.route('/api/adv/say', methods=['POST'])
 def say():
+    player = get_player_by_header(world, request.headers.get("Authorization"))
+    if player is None:
+        response = {'error': "Malformed auth header"}
+        return response, 500
+
     try:
         values = request.get_json()
-        username = values.username
-        message = values.message
-        pusher.trigger('chat-channel', 'new-message', {'username': username, 'message': message})
-        return jsonify({'result': 'success'}), 200
+        message = values.get('message')
+        pusher.trigger('chat-channel', 'new-message', {'username': player.username, 'message': message})
+        return jsonify({'result': f'{player.username} says: "{message}"'}), 200
     except:
         return jsonify({'result': 'failure'}), 500
 
