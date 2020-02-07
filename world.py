@@ -222,11 +222,11 @@ class World:
                             room.connect_rooms('w', west)
                         
         for room in rooms_list:
-            print(room.id)
+            # print(room.id)
             exits = sorted(room.get_exits())
-            print(exits)
-            print()
-            # store rooms - Stores should be in NESW, ES, NE, WS, NW
+            # print(exits)
+            # print()
+            # # store rooms - Stores should be in NESW, ES, NE, WS, NW
             if (exits == ['e', 'n', 's', 'w'] or exits == ['e', 's'] or exits == ['e', 'n'] or exits == ['s', 'w'] or exits == ['n', 'w']):
                 room.store = Store(stock = [random.choice(item_list), random.choice(item_list)], vault = random.randint(50, 100)) 
                 if exits == ['e', 'n', 's', 'w']:
