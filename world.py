@@ -11,9 +11,12 @@ import pandas as pd
 levels = pd.read_csv('room-info.csv')
 
 item_list = [Item('Pile of Gold', 'Contains several coins', 20),
-            Item('Ring', 'Size 8', 15), Item('Gem', 'Beautifully polished', 50),
-            Item('Crown', 'Used to adorn royalty', 150), Item('Scroll', 'Just says kek', 1),
-            Item('Potion', 'Used to increase health', 25), Item('Dice', 'YAHTZEE!', 2),
+            Item('Ring', 'Size 8', 15), 
+            Item('Gem', 'Beautifully polished', 50),
+            Item('Crown', 'Used to adorn royalty', 150), 
+            Item('Scroll', 'Just says kek', 1),
+            Item('Potion', 'Used to increase health', 25), 
+            Item('Dice', 'YAHTZEE!', 2),
             Weapon('Silver Sword', "A Witcher's favorite", 20, 'sword', 100),
             Weapon('Wooden Spear', 'Longer than a sword', 25, 'spear', 15),
             Weapon('Wooden Shield', 'Good against arrows', 13, 'shield', 3),

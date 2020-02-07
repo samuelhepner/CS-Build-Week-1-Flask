@@ -4,10 +4,10 @@ class Item:
         self.description = description
         self.price = price
 
-    def __str__(self):
-        display_string = f"{self.name}, "
-        display_string += f"{self.description}"
-        return display_string
+    # def __str__(self):
+    #     display_string = f"{self.name}, "
+    #     display_string += f"{self.description}"
+    #     return display_string
 
 class Food(Item):
     def __init__(self, name, description, price, food_type, healing_amount=0):

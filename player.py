@@ -3,7 +3,7 @@ import uuid
 from items import Item, Food, Weapon
 
 class Player:
-    def __init__(self, name, starting_room, password_hash, coin_purse = 5, inventory = [Weapon('Rusty Sword', "Don't cut yourself", 5, "Short Sword", 2), Food('Apple', "Yummy", 1, "Fruit", 3)]):
+    def __init__(self, name, starting_room, password_hash, coin_purse = 5, inventory = [Item('Scroll', 'Just says kek', 1), Weapon('Rusty Sword', "Don't cut yourself", 5, "Short Sword", 2), Food('Apple', "Yummy", 1, "Fruit", 3)]):
         self.username = name
         self.current_room = starting_room
         self.auth_key = Player.__generate_auth_key()
