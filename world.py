@@ -220,16 +220,50 @@ class World:
                             room = self.grid[y][x]
                             west = self.grid[y][x-1]
                             room.connect_rooms('w', west)
-
+                        
         for room in rooms_list:
             print(room.id)
-            print(room.get_exits())
+            exits = sorted(room.get_exits())
+            print(exits)
             print()
-        
-        # Tree room should be in WE, NW
-        # Stores should be in NESW, ES, NE, WS, NW
-        # Treasure room in N and S(silver) and S and W (Bronze)
+            # store rooms - Stores should be in NESW, ES, NE, WS, NW
+            if (exits == ['e', 'n', 's', 'w'] or exits == ['e', 's'] or exits == ['e', 'n'] or exits == ['s', 'w'] or exits == ['n', 'w']):
+                room.store = Store(stock = (random.choice(item_list), random.choice(item_list)), vault = random.randint(50, 100)) 
+                if exits == ['e', 'n', 's', 'w']:
+                    room.name = levels['name'][8]
+                    room.description = levels['description'][8]
+                elif exits == ['e', 's']:
+                    room.name = levels['name'][2]
+                    room.description = levels['description'][2]
+                elif exits == ['e', 'n']:
+                    room.name = levels['name'][6]
+                    room.description = levels['description'][6]
+                elif exits == ['s', 'w']:
+                    room.name = levels['name'][1]
+                    room.description = levels['description'][1]
+                else:
+                    room.name = levels['name'][5]
+                    room.description = levels['description'][5]
 
+            # tree rooms - Tree room should be in WE, NW
+            if (exits == ['e', 'w'] or exits == ['n', 'w']):
+                if exits == ['e', 'w']:
+                    room.name = levels['name'][4]
+                    room.description = levels['description'][4]
+                if exits == ['n', 'w']:
+                    room.name = levels['name'][11]
+                    room.description = levels['description'][11]
+
+            # treasure rooms - Treasure room in N and S(silver) and E and W (Bronze)
+            if (exits == ['n'] or exits == ['s'] or exits == ['s'] or exits == ['w']):
+                if exits == ['n'] or exits == ['s']:
+                    room.name = levels['name'][0]
+                    room.description = levels['name'][0]
+                    room.items = [item_list[0], item_list[2]]
+                if exits == ['e'] or exits == ['w']:
+                    room.name = levels['name'][10]
+                    room.description = levels['name'][10]
+                    room.items = [item_list[0], item_list[1]]
 
     def print_rooms(self):
         '''

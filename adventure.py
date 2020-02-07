@@ -4,8 +4,7 @@ from time import time
 from uuid import uuid4
 
 from flask import Flask, jsonify, request, render_template, make_response
-from flask_cors import CORS, cross_origin
-# from pusher import Pusher
+from pusher import Pusher
 from decouple import config
 
 from room import Room
@@ -15,7 +14,7 @@ from items import Item, Food, Weapon
 from store import Store
 
 # Look up decouple for config variables
-# pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
+pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
 
 world = World()
 world.print_rooms()
@@ -74,6 +73,10 @@ def register():
     if 'error' in response:
         return jsonify("Registration error", response), 500
     else:
+        pusher.trigger(
+            u'world', u'joined',
+            {'global': "{} has joined the game".format(username)}
+        )
         return jsonify(response), 200
 
 # test endpoint
@@ -98,6 +101,10 @@ def login():
     if response is None:
         return jsonify(response), 500
     else:
+        pusher.trigger(
+            u'world', u'joined',
+            {'global': "{} has joined the game".format(username)}
+        )
         return jsonify(response), 200
 
 
@@ -302,6 +309,18 @@ def rooms():
     # IMPLEMENT THIS
     response = {'rooms': world.print_rooms()}
     return jsonify(response), 200
+
+
+@app.route('/api/adv/say', methods=['POST'])
+def say():
+    try:
+        values = request.get_json()
+        username = values.username
+        message = values.message
+        pusher_client.trigger('chat-channel', 'new-message', {'username': username, 'message': message})
+        return jsonify({'result': 'success'}), 200
+    except:
+        return jsonify({'result': 'failure'}), 500
 
 
 # Run the program on port 5000
