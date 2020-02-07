@@ -76,7 +76,7 @@ def register():
         pusher.trigger(
             'world', 'joined', {'pusher': f"{username} has joined the game"}
         )
-        return jsonify(response), 200
+        return jsonify(response, {'pusher': f"{username} has joined the game"}), 200
 
 # test endpoint
 @app.route('/', methods=['GET'])
@@ -103,7 +103,7 @@ def login():
         pusher.trigger(
             'world', 'joined', {'pusher': f"{username} has joined the game"}
         )
-        return jsonify(response), 200
+        return jsonify(response, {'pusher': f"{username} has joined the game"}), 200
 
 
 @app.route('/api/adv/init/', methods=['GET'])
@@ -320,9 +320,9 @@ def say():
         values = request.get_json()
         message = values.get('message')
         pusher.trigger('chat-channel', 'new-message', {'username': player.username, 'message': message})
-        return jsonify({'result': f'{player.username} says: "{message}"'}), 200
+        return jsonify({'pusher': f'{player.username} says: "{message}"'}), 200
     except:
-        return jsonify({'result': 'failure'}), 500
+        return jsonify({'error': 'failure'}), 500
 
 
 # Run the program on port 5000
