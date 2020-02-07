@@ -167,12 +167,16 @@ def take_item():
     values = request.get_json()
     items = player.current_room.items
 
+    for item in player.inventory:
+        if item.name.lower() == values['item_name'].lower():
+            return jsonify(f"You already have a {item.name}"), 500
     for item in items:
         if item.name.lower() == values['item_name'].lower():
             player.inventory.append(item)
-            print('THIS IS THE ITEM: ', item.name)
+            # print('THIS IS THE ITEM: ', item.name)
             player.current_room.items.remove(item)
             return jsonify(f"You have picked up {item.name}"), 200
+    return jsonify(f"{values['item_name']} not found"), 500
 
 
 @app.route('/api/adv/drop/', methods=['POST'])
@@ -194,8 +198,7 @@ def drop_item():
             player.inventory.remove(item)
             player.current_room.items.append(item)
             return jsonify(f"You have dropped {item.name}"), 200
-        else:
-            return jsonify('Item not found'), 500
+    return jsonify(f"{values['item_name']} not found"), 500
 
 
 @app.route('/api/adv/inventory/', methods=['GET'])
@@ -218,7 +221,7 @@ def inventory():
         elif (type(player.inventory[i]) is Food):
             response.append({'name': player.inventory[i].name, 'description': player.inventory[i].description, 'price': player.inventory[i].price, 'food_type': player.inventory[i].food_type, 
                             'healing_amount': player.inventory[i].healing_amount})
-        else:
+        elif (type(player.inventory[i]) is Item):
             response.append({'name': player.inventory[i].name, 'description': player.inventory[i].description, 'price': player.inventory[i].price})
     
     return jsonify({'Inventory': response, 'Money': player.coin_purse}), 200
@@ -238,6 +241,9 @@ def buy_item():
     else:
         return jsonify("There's no store here!"), 500
 
+    for item in player.inventory:
+        if item.name.lower() == values['item_name'].lower():
+            return jsonify(f"You already have a {item.name}"), 500
     for item in stock:
         if item.name.lower() == values['item_name'].lower():
             if (item.price <= player.coin_purse):
@@ -248,7 +254,8 @@ def buy_item():
                 return jsonify(f"You have bought up {item.name}. You have {player.coin_purse} gold coins left."), 200
             else:
                 return jsonify('You do not have enough gold coins to buy that item.'), 500
-                
+    return jsonify(f"{values['item_name']} not found"), 500
+        
 
 @app.route('/api/adv/sell/', methods=['POST'])
 def sell_item():
@@ -272,10 +279,10 @@ def sell_item():
                 stock.append(item)
                 player.coin_purse += item.price
                 player.current_room.store.vault -= item.price
-                return jsonify(f"You have sold up {item.name}. You have {player.coin_purse} gold coins left."), 200
+                return jsonify(f"You have sold your {item.name}. You have {player.coin_purse} gold coins left."), 200
             else:
                 return jsonify('Store does not have enough gold coins to buy that item from you.'), 500
-
+    return jsonify(f"{values['item_name']} not found"), 500
 
 @app.route('/api/adv/store', methods=['GET'])
 def check_store():
