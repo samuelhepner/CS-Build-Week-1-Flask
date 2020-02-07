@@ -73,10 +73,6 @@ def register():
     if 'error' in response:
         return jsonify("Registration error", response), 500
     else:
-        pusher.trigger(
-            u'world', u'joined',
-            {'global': "{} has joined the game".format(username)}
-        )
         return jsonify(response), 200
 
 # test endpoint
@@ -101,10 +97,6 @@ def login():
     if response is None:
         return jsonify(response), 500
     else:
-        pusher.trigger(
-            u'world', u'joined',
-            {'global': "{} has joined the game".format(username)}
-        )
         return jsonify(response), 200
 
 
