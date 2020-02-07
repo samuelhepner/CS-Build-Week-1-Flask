@@ -18,6 +18,7 @@ from store import Store
 # pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
 
 world = World()
+world.print_rooms()
 
 app = Flask(__name__)
 
@@ -165,6 +166,7 @@ def take_item():
         if item.name.lower() == values['item_name'].lower():
             player.inventory.append(item)
             print('THIS IS THE ITEM: ', item.name)
+            player.current_room.items.remove(item)
             return jsonify(f"You have picked up {item.name}"), 200
 
 
@@ -298,8 +300,8 @@ def check_store():
 @app.route('/api/adv/rooms/', methods=['GET'])
 def rooms():
     # IMPLEMENT THIS
-    response = {'error': "Not implemented"}
-    return jsonify(response), 400
+    response = {'rooms': world.print_rooms()}
+    return jsonify(response), 200
 
 
 # Run the program on port 5000
