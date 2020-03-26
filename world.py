@@ -6,17 +6,15 @@ import random
 import math
 import bcrypt
 import pandas as pd
+import numpy as np
 
 
 levels = pd.read_csv('room-info.csv')
 
 item_list = [Item('Pile of Gold', 'Contains several coins', 20),
-            Item('Ring', 'Size 8', 15), 
-            Item('Gem', 'Beautifully polished', 50),
-            Item('Crown', 'Used to adorn royalty', 150), 
-            Item('Scroll', 'Just says kek', 1),
-            Item('Potion', 'Used to increase health', 25), 
-            Item('Dice', 'YAHTZEE!', 2),
+            Item('Ring', 'Size 8', 15), Item('Gem', 'Beautifully polished', 50),
+            Item('Crown', 'Used to adorn royalty', 150), Item('Scroll', 'Just says kek', 1),
+            Item('Potion', 'Used to increase health', 25), Item('Dice', 'YAHTZEE!', 2),
             Weapon('Silver Sword', "A Witcher's favorite", 20, 'sword', 100),
             Weapon('Wooden Spear', 'Longer than a sword', 25, 'spear', 15),
             Weapon('Wooden Shield', 'Good against arrows', 13, 'shield', 3),
@@ -36,19 +34,25 @@ class World:
         self.create_world(100)
         self.password_salt = bcrypt.gensalt()
 
+
     def add_player(self, username, password1, password2):
         if password1 != password2:
             return {'error': "Passwords do not match"}
+
         elif len(username) <= 2:
             return {'error': "Username must be longer than 2 characters"}
+
         elif len(password1) <= 5:
             return {'error': "Password must be longer than 5 characters"}
+
         elif self.get_player_by_username(username) is not None:
             return {'error': "Username already exists"}
+
         password_hash = bcrypt.hashpw(password1.encode(), self.password_salt)
         player = Player(username, self.starting_room, password_hash)
         self.players[player.auth_key] = player
         return {'key': player.auth_key}
+
 
     def get_player_by_auth(self, auth_key):
         if auth_key in self.players:
@@ -56,11 +60,13 @@ class World:
         else:
             return None
 
+
     def get_player_by_username(self, username):
         for auth_key in self.players:
             if self.players[auth_key].username == username:
                 return self.players[auth_key]
         return None
+
 
     def authenticate_user(self, username, password):
         user = self.get_player_by_username(username)
@@ -72,6 +78,7 @@ class World:
             return {'key': user.auth_key}
         return None
 
+
     def init_grid(self):
         self.height = 20
         self.grid = [None] * self.height
@@ -80,6 +87,7 @@ class World:
         
         for i in range(len(self.grid)):
             self.grid[i] = [None] * self.width
+
 
     def create_world(self, num_rooms):
         first_x = (self.width // 2) - 1 
@@ -112,7 +120,6 @@ class World:
                     # print(x, y)
                     direction_list = [1, 2, 3, 4]
                     direction = random.choice(direction_list) # 1: North, 2: South, 3: East, 4: West
-                    
                         
             # Calculate the direction of the room to be created
             if (direction == 1):
@@ -152,7 +159,6 @@ class World:
                         if previous_room is not None:
                             previous_room.connect_rooms(room_direction, room)
                         previous_room = room
-                        
                     else:
                         direction_list.remove(2)
                 else:
@@ -174,7 +180,6 @@ class World:
                         if previous_room is not None:
                             previous_room.connect_rooms(room_direction, room)
                         previous_room = room
- 
                     else:
                         direction_list.remove(3)
                 else:
@@ -196,7 +201,6 @@ class World:
                         if previous_room is not None:
                             previous_room.connect_rooms(room_direction, room)
                         previous_room = room
-                      
                     else:
                         direction_list.remove(4)
                 else:
@@ -205,7 +209,6 @@ class World:
         for y in range(self.height):
             for x in range(self.width):
                 if(self.grid[y][x] is not None):
-                    # print(self.width, '+', self.height)
                     if ((y+1) < self.height and (y-1) >= 0 and (x+1) < self.width and (x-1) >= 0):
                         if (self.grid[y+1][x] is not None):
                             room = self.grid[y][x]
@@ -225,10 +228,8 @@ class World:
                             room.connect_rooms('w', west)
                         
         for room in rooms_list:
-            # print(room.id)
             exits = sorted(room.get_exits())
-            # print(exits)
-            # print()
+
             # # store rooms - Stores should be in NESW, ES, NE, WS, NW
             if (exits == ['e', 'n', 's', 'w'] or exits == ['e', 's'] or exits == ['e', 'n'] or exits == ['s', 'w'] or exits == ['n', 'w']):
                 room.store = Store(stock = [random.choice(item_list), random.choice(item_list)], vault = random.randint(50, 100)) 
@@ -267,6 +268,11 @@ class World:
                     room.name = levels['name'][10]
                     room.description = levels['name'][10]
                     room.items = [item_list[0], item_list[1]]
+        
+        for rooms in self.grid:
+            for room in rooms:
+                if room:
+                    self.rooms[room.id] = (room.x, room.y)
 
     def print_rooms(self):
         '''
@@ -316,9 +322,14 @@ class World:
         # Add bottom border
         str += "# " * ((3 + self.width * 5) // 2) + "\n"
         # Print string
-        print(str)
+        # print(str)
 
         return str
 
-# world = World()
-# world.print_rooms()
+    # A new prettier print rooms
+    # So Teddy can display a better map
+    def matrix_map(self):
+        print(self.rooms)
+
+world = World()
+world.matrix_map()

@@ -13,17 +13,10 @@ from world import World
 from items import Item, Food, Weapon
 from store import Store
 
-# Look up decouple for config variables
-# pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
 
 world = World()
-# world.print_rooms()
-
 app = Flask(__name__)
 
-# CORS(app, supports_credentials = True)
-# app.config['CORS_ALLOW_HEADERS'] = "Content-Type"
-# app.config['CORS_RESOURCES'] = {r"/": {"origins": "https://client-lilac.now.sh/"}}
 
 @app.after_request
 def after_request(response):
@@ -47,13 +40,6 @@ def get_player_by_header(world, auth_header):
 
 @app.route('/api/registration/', methods=['POST'])
 def register():
-    # if request.method == 'OPTIONS':
-    #     response = make_response()
-    #     response.headers['Access-Control-Allow-Origin'] = '*'
-    #     response.headers['Access-Control-Allow-Headers'] = '*'
-    #     response.headers['Access-Control-Allow-Methods'] = '*'
-    #     return response, 200
-
     values = request.get_json()
     required = ['username', 'password1', 'password2']
 
@@ -65,17 +51,11 @@ def register():
     password1 = values.get('password1')
     password2 = values.get('password2')
 
-    # response = make_response(world.add_player(username, password1, password2))
-    # response.headers['Access-Control-Allow-Origin'] = '*'
-
     response = world.add_player(username, password1, password2)
 
     if 'error' in response:
         return jsonify("Registration error", response), 500
     else:
-        # pusher.trigger(
-        #     'world', 'joined', {'pusher': f"{username} has joined the game"}
-        # )
         return jsonify(response), 200
 
 # test endpoint
@@ -85,7 +65,6 @@ def test_method():
 
 @app.route('/api/login/', methods=['POST'])
 def login():
-    # IMPLEMENT THIS
     values = request.get_json()
     required = ['username', 'password']
 
@@ -100,9 +79,6 @@ def login():
     if response is None:
         return jsonify(response), 500
     else:
-        # pusher.trigger(
-        #     'world', 'joined', {'pusher': f"{username} has joined the game"}
-        # )
         return jsonify(response), 200
 
 
@@ -120,7 +96,7 @@ def init():
         'exits': player.current_room.get_exits(),
         'items': player.current_room.get_items()
     }
-    # print('THIS IS THE ROOM: ', player.current_room)
+
     return jsonify(response), 200
 
 
@@ -154,11 +130,6 @@ def move():
 
 @app.route('/api/adv/take/', methods=['POST'])
 def take_item():
-    # IMPLEMENT THIS
-    # {
-    #   "item_name":"Torch"
-    # }
-
     player = get_player_by_header(world, request.headers.get("Authorization"))
     if player is None:
         response = {'error': "Malformed auth header"}
@@ -167,24 +138,16 @@ def take_item():
     values = request.get_json()
     items = player.current_room.items
 
-    for item in player.inventory:
-        if item.name.lower() == values['item_name'].lower():
-            return jsonify(f"You already have a {item.name}"), 500
     for item in items:
         if item.name.lower() == values['item_name'].lower():
             player.inventory.append(item)
-            # print('THIS IS THE ITEM: ', item.name)
+            print('THIS IS THE ITEM: ', item.name)
             player.current_room.items.remove(item)
             return jsonify(f"You have picked up {item.name}"), 200
-    return jsonify(f"{values['item_name']} not found"), 500
 
 
 @app.route('/api/adv/drop/', methods=['POST'])
 def drop_item():
-    # IMPLEMENT THIS
-    # {
-    #   "item":"{name: "Short sword", price: 5, description: "It's sharp."}"
-    # }
     player = get_player_by_header(world, request.headers.get("Authorization"))
     if player is None:
         response = {'error': "Malformed auth header"}
@@ -198,21 +161,17 @@ def drop_item():
             player.inventory.remove(item)
             player.current_room.items.append(item)
             return jsonify(f"You have dropped {item.name}"), 200
-    return jsonify(f"{values['item_name']} not found"), 500
+        else:
+            return jsonify('Item not found'), 500
 
 
 @app.route('/api/adv/inventory/', methods=['GET'])
 def inventory():
-    # IMPLEMENT THIS
     player = get_player_by_header(world, request.headers.get("Authorization"))
     if player is None:
         response = {'error': "Malformed auth header"}
         return response, 500
-    
-    # response = {
-    #     'name': player.coin_purse,
-    #     'description': 
-    # }
+
     response = []
     for i in range(len(player.inventory)):
         if (type(player.inventory[i]) is Weapon):
@@ -221,7 +180,7 @@ def inventory():
         elif (type(player.inventory[i]) is Food):
             response.append({'name': player.inventory[i].name, 'description': player.inventory[i].description, 'price': player.inventory[i].price, 'food_type': player.inventory[i].food_type, 
                             'healing_amount': player.inventory[i].healing_amount})
-        elif (type(player.inventory[i]) is Item):
+        else:
             response.append({'name': player.inventory[i].name, 'description': player.inventory[i].description, 'price': player.inventory[i].price})
     
     return jsonify({'Inventory': response, 'Money': player.coin_purse}), 200
@@ -229,7 +188,6 @@ def inventory():
 
 @app.route('/api/adv/buy/', methods=['POST'])
 def buy_item():
-    # IMPLEMENT THIS
     player = get_player_by_header(world, request.headers.get("Authorization"))
     if player is None:
         response = {'error': "Malformed auth header"}
@@ -241,9 +199,6 @@ def buy_item():
     else:
         return jsonify("There's no store here!"), 500
 
-    for item in player.inventory:
-        if item.name.lower() == values['item_name'].lower():
-            return jsonify(f"You already have a {item.name}"), 500
     for item in stock:
         if item.name.lower() == values['item_name'].lower():
             if (item.price <= player.coin_purse):
@@ -254,12 +209,10 @@ def buy_item():
                 return jsonify(f"You have bought up {item.name}. You have {player.coin_purse} gold coins left."), 200
             else:
                 return jsonify('You do not have enough gold coins to buy that item.'), 500
-    return jsonify(f"{values['item_name']} not found"), 500
-        
+                
 
 @app.route('/api/adv/sell/', methods=['POST'])
 def sell_item():
-    # IMPLEMENT THIS
     player = get_player_by_header(world, request.headers.get("Authorization"))
     if player is None:
         response = {'error': "Malformed auth header"}
@@ -279,10 +232,10 @@ def sell_item():
                 stock.append(item)
                 player.coin_purse += item.price
                 player.current_room.store.vault -= item.price
-                return jsonify(f"You have sold your {item.name}. You have {player.coin_purse} gold coins left."), 200
+                return jsonify(f"You have sold up {item.name}. You have {player.coin_purse} gold coins left."), 200
             else:
                 return jsonify('Store does not have enough gold coins to buy that item from you.'), 500
-    return jsonify(f"{values['item_name']} not found"), 500
+
 
 @app.route('/api/adv/store', methods=['GET'])
 def check_store():
@@ -314,22 +267,6 @@ def rooms():
     # IMPLEMENT THIS
     response = {'rooms': world.print_rooms()}
     return jsonify(response), 200
-
-
-# @app.route('/api/adv/say', methods=['POST'])
-# def say():
-#     player = get_player_by_header(world, request.headers.get("Authorization"))
-#     if player is None:
-#         response = {'error': "Malformed auth header"}
-#         return response, 500
-
-#     try:
-#         values = request.get_json()
-#         message = values.get('message')
-#         pusher.trigger('chat-channel', 'new-message', {'username': player.username, 'message': message})
-#         return jsonify({'pusher': f'{player.username} says: "{message}"'}), 200
-#     except:
-#         return jsonify({'error': 'failure'}), 500
 
 
 # Run the program on port 5000
