@@ -4,8 +4,6 @@ from time import time
 from uuid import uuid4
 
 from flask import Flask, jsonify, request, render_template, make_response
-# from pusher import Pusher
-# from decouple import config
 
 from room import Room
 from player import Player
@@ -58,10 +56,12 @@ def register():
     else:
         return jsonify(response), 200
 
-# test endpoint
+
 @app.route('/', methods=['GET'])
+# test endpoint
 def test_method():
     return 'Welcome Adventurer'
+
 
 @app.route('/api/login/', methods=['POST'])
 def login():
@@ -174,10 +174,10 @@ def inventory():
 
     response = []
     for i in range(len(player.inventory)):
-        if (type(player.inventory[i]) is Weapon):
+        if type(player.inventory[i]) is Weapon:
             response.append({'name': player.inventory[i].name, 'description': player.inventory[i].description, 'price': player.inventory[i].price, 'weapon_type': player.inventory[i].weapon_type, 
                             'damage': player.inventory[i].damage})
-        elif (type(player.inventory[i]) is Food):
+        elif type(player.inventory[i]) is Food:
             response.append({'name': player.inventory[i].name, 'description': player.inventory[i].description, 'price': player.inventory[i].price, 'food_type': player.inventory[i].food_type, 
                             'healing_amount': player.inventory[i].healing_amount})
         else:
@@ -194,14 +194,14 @@ def buy_item():
         return response, 500
 
     values = request.get_json()
-    if (player.current_room.store is not None):
+    if player.current_room.store is not None:
         stock = player.current_room.store.stock
     else:
         return jsonify("There's no store here!"), 500
 
     for item in stock:
         if item.name.lower() == values['item_name'].lower():
-            if (item.price <= player.coin_purse):
+            if item.price <= player.coin_purse:
                 player.inventory.append(item)
                 player.coin_purse -= item.price
                 player.current_room.store.vault += item.price
@@ -219,7 +219,7 @@ def sell_item():
         return response, 500
 
     values = request.get_json()
-    if (player.current_room.store is not None):
+    if player.current_room.store is not None:
         inventory = player.inventory
         stock = player.current_room.store.stock
     else:
@@ -227,7 +227,7 @@ def sell_item():
 
     for item in inventory:
         if item.name.lower() == values['item_name'].lower():
-            if (item.price <= player.current_room.store.vault):
+            if item.price <= player.current_room.store.vault:
                 player.inventory.remove(item)
                 stock.append(item)
                 player.coin_purse += item.price
@@ -250,10 +250,10 @@ def check_store():
     stock = player.current_room.store.stock
     response = []
     for i in range(len(stock)):
-        if (type(stock[i]) is Weapon):
+        if type(stock[i]) is Weapon:
             response.append({'name': stock[i].name, 'description': stock[i].description, 'price': stock[i].price, 'weapon_type': stock[i].weapon_type, 
                             'damage': stock[i].damage})
-        elif (type(stock[i]) is Food):
+        elif type(stock[i]) is Food:
             response.append({'name': stock[i].name, 'description': stock[i].description, 'price': stock[i].price, 'food_type': stock[i].food_type, 
                             'healing_amount': stock[i].healing_amount})
         else:
