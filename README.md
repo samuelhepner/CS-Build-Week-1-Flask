@@ -166,24 +166,6 @@ These are implemented on the test server: `https://lambda-mud-test.herokuapp.com
   * Players in previous room receive a message: `<name> has walked north.`
   * Players in next room receive a message: `<name> has entered from the south.`
 
-### Say
-* Request:  (Replace token string with logged in user's auth token)
-  * `curl -X POST -H 'Authorization: Token 6b7b9d0f33bd76e75b0a52433f268d3037e42e66' -H "Content-Type: application/json" -d '{"message":"Hello, world!"}' localhost:8000/api/adv/say/`
-* Pusher broadcast:
-  * Players in current room receive a message: `<name> says "Hello, world!"`
-
-## Pusher
-
-WebSocket is a computer communications protocol, providing full-duplex communication channels over a single TCP connection. You may use the Pusher service to handle the WebSocket connections as a stretch goal for your project. You can read more about them [here](https://pusher.com/websockets).
-
-### Set up a Pusher account
-* Sign up for a free account on pusher.com
-* Create a new app
-* Take note of your credentials
-  * app_id, key, secret, cluster
-* Look through the provided sample code and documentation
-
-
 ## FAQs and Troubleshooting
 
 ### 1. Can you show me an example of a map visualization?
@@ -218,13 +200,7 @@ What data do you need to implement this? A list of rooms, their exits, maybe the
 
 I'll leave that to you to determine.
 
-
-### 4. What is Pusher?
-
-Pusher is a cross-platform websocket library. This will allow you to turn your app into a real MUD with live push notifications to your client. You can consider integration to be a stretch goal but it's worth the effort if you have the time: websockets are powerful!
-
-
-### 5. What will the `rooms` API endpoint look like?
+### 4. What will the `rooms` API endpoint look like?
 
 It's up to you what data the request will return but the API request should be something like this:
 
